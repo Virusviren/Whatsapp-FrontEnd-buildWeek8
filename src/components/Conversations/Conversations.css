@@ -1,0 +1,21 @@
+.Conversations {
+  border-right: 1px solid gray;
+  width: 300px;
+  overflow: auto;
+}
+.Conversations .topbar {
+  padding: 10px;
+  background-color: rgb(198, 198, 198);
+  height: 60px;
+}
+.Conversations .topbar svg {
+  cursor: pointer;
+  color: red;
+}
+.Conversations .topbar svg:hover {
+  color: rgb(154, 0, 0);
+}
+
+.Conversations img {
+  margin-right: 15px;
+}
