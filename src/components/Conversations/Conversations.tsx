@@ -1,10 +1,13 @@
 import { Form, FormControl } from "react-bootstrap"
 import { MdMessage } from "react-icons/md"
+import { useAppSelector } from "../../redux/app/hooks"
+import { selectConversationsData } from "../../redux/slices/conversationsSlice"
 import Avatar from "../Avatar/Avatar"
 import ConversationItem from "../ConversationItem/ConversationItem"
 import "./Conversations.css"
 
 const Conversations = () => {
+  const conversationsStore = useAppSelector(selectConversationsData)
   return (
     <div className="Conversations">
       <div className="d-flex flex-column align-items-center topbar">
@@ -17,22 +20,18 @@ const Conversations = () => {
         </Form>
       </div>
       <div>
+        {conversationsStore.map(conversation => (
+          <ConversationItem
+            key={conversation._id}
+            id={conversation._id}
+            title={conversation.title}
+            avatar={conversation.avatar}
+            subtitle={conversation.messageHistory.length === 0 ? "No messages yet" : conversation.messageHistory[0].content!}
+          />
+        ))}
+        {/* <ConversationItem title="Group name" avatar={process.env.REACT_APP_MOCK_GROUP_AVATAR!} subtitle="last message" />
         <ConversationItem title="Group name" avatar={process.env.REACT_APP_MOCK_GROUP_AVATAR!} subtitle="last message" />
-        <ConversationItem title="Group name" avatar={process.env.REACT_APP_MOCK_GROUP_AVATAR!} subtitle="last message" />
-        <ConversationItem title="Group name" avatar={process.env.REACT_APP_MOCK_GROUP_AVATAR!} subtitle="last message" />
-        <ConversationItem title="Group name" avatar={process.env.REACT_APP_MOCK_GROUP_AVATAR!} subtitle="last message" />
-        <ConversationItem title="Group name" avatar={process.env.REACT_APP_MOCK_GROUP_AVATAR!} subtitle="last message" />
-        <ConversationItem title="Group name" avatar={process.env.REACT_APP_MOCK_GROUP_AVATAR!} subtitle="last message" />
-        <ConversationItem title="Group name" avatar={process.env.REACT_APP_MOCK_GROUP_AVATAR!} subtitle="last message" />
-        <ConversationItem title="Group name" avatar={process.env.REACT_APP_MOCK_GROUP_AVATAR!} subtitle="last message" />
-        <ConversationItem title="Group name" avatar={process.env.REACT_APP_MOCK_GROUP_AVATAR!} subtitle="last message" />
-        <ConversationItem title="Group name" avatar={process.env.REACT_APP_MOCK_GROUP_AVATAR!} subtitle="last message" />
-        <ConversationItem title="Group name" avatar={process.env.REACT_APP_MOCK_GROUP_AVATAR!} subtitle="last message" />
-        <ConversationItem title="Group name" avatar={process.env.REACT_APP_MOCK_GROUP_AVATAR!} subtitle="last message" />
-        <ConversationItem title="Group name" avatar={process.env.REACT_APP_MOCK_GROUP_AVATAR!} subtitle="last message" />
-        <ConversationItem title="Group name" avatar={process.env.REACT_APP_MOCK_GROUP_AVATAR!} subtitle="last message" />
-        <ConversationItem title="Group name" avatar={process.env.REACT_APP_MOCK_GROUP_AVATAR!} subtitle="last message" />
-        <ConversationItem title="Group name" avatar={process.env.REACT_APP_MOCK_GROUP_AVATAR!} subtitle="last message" />
+        <ConversationItem title="Group name" avatar={process.env.REACT_APP_MOCK_GROUP_AVATAR!} subtitle="last message" /> */}
       </div>
     </div>
   )
