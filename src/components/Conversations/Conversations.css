@@ -3,17 +3,21 @@
   width: 300px;
   overflow: auto;
 }
+.Conversations::-webkit-scrollbar {
+  display: none;
+}
 .Conversations .topbar {
   padding: 10px;
   background-color: rgb(198, 198, 198);
-  height: 60px;
+  position: sticky;
+  top: 0;
 }
 .Conversations .topbar svg {
   cursor: pointer;
-  color: red;
+  color: rgb(0, 145, 164);
 }
 .Conversations .topbar svg:hover {
-  color: rgb(154, 0, 0);
+  color: rgb(0, 109, 123);
 }
 
 .Conversations img {
