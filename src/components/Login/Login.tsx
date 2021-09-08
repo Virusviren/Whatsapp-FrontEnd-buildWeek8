@@ -8,11 +8,8 @@ import InputGroup from "react-bootstrap/InputGroup"
 import FormControl from "react-bootstrap/FormControl"
 import "../Login/Login.css"
 import backend from "../../backend/backend"
-import { useAppDispatch } from "../../redux/app/hooks"
-import { fetchUserData } from "../../redux/slices/userSlice"
 
 const Login = () => {
-  const dispatch = useAppDispatch()
   const [credentials, setCredentials] = useState({ email: "", password: "" })
 
   const history = useHistory()
@@ -24,7 +21,6 @@ const Login = () => {
     e.preventDefault()
     try {
       await backend.post("/auth/login", credentials)
-      dispatch(fetchUserData())
       history.push("/")
     } catch (error) {
       console.log(error)

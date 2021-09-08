@@ -1,9 +1,11 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit"
 import userReducer from "../slices/userSlice"
+import conversationsReducer from "../slices/conversationsSlice"
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
+    conversations: conversationsReducer,
   },
 })
 
