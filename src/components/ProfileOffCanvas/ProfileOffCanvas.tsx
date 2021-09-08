@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Button from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import Image from 'react-bootstrap/Image';
@@ -11,9 +11,12 @@ const ProfileOffCanvas = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const uploadImage = () => {};
-  //     document.getElementById('imageClick').click();
-  //   };
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const uploadImage = () => {
+    fileRef.current?.click();
+  };
+
   return (
     <>
       <Button variant='primary' onClick={handleShow}>
@@ -37,7 +40,8 @@ const ProfileOffCanvas = () => {
                 type='file'
                 accept='image/gif,image/jpeg,image/jpg,image/png'
                 style={{ display: 'none' }}
-                id='#imageClick'
+                id='imageClick'
+                ref={fileRef}
               />
               <AiFillCamera
                 className='edit-img-top middle-over-lay'
