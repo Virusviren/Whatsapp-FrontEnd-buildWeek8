@@ -1,68 +1,41 @@
 import { Form, FormControl } from "react-bootstrap"
 import { MdInsertEmoticon } from "react-icons/md"
-import { GrAttachment } from "react-icons/gr"
+import { ImAttachment } from "react-icons/im"
 import Avatar from "../Avatar/Avatar"
 
 import "./ChatPanel.css"
 import Message from "../Message/Message"
+import { useAppSelector } from "../../redux/app/hooks"
+import { selectActiveConversation, selectActiveHistory } from "../../redux/slices/conversationsSlice"
+import { selectUserData } from "../../redux/slices/userSlice"
 
-interface ChatPanelProps {
-  title: string
-  participants: string[]
-  avatar: string
-}
-
-const ChatPanel = ({ title, participants, avatar }: ChatPanelProps) => {
+const ChatPanel = () => {
+  const { avatar, title, users } = useAppSelector(selectActiveConversation)
+  const messages = useAppSelector(selectActiveHistory)
+  const loggedInUser = useAppSelector(selectUserData)
   return (
     <div className="ChatPanel">
       <div className="d-flex align-items-center topbar">
-        <Avatar url={avatar} />
+        {avatar && <Avatar url={avatar!} />}
         <div className="ms-3">
-          <h6>{title}</h6>
-          <p className="text-muted">{participants.join(", ")}</p>
+          {title ? <h6>{title}</h6> : <h6>Select a conversation</h6>}
+          <p className="text-muted">{users?.join(", ")}</p>
         </div>
       </div>
       <div className="messages">
-        <Message
-          message="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
-          position="right"
-          date={new Date()}
-          sender="Tiago"
-        />
-        <Message
-          message="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
-          position="left"
-          date={new Date()}
-          sender="Viljams"
-        />
-        <Message
-          message="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
-          position="left"
-          date={new Date()}
-          sender="Nando"
-        />
-        <Message
-          message="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
-          position="left"
-          date={new Date()}
-          sender="Viren"
-        />
-        <Message
-          message="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
-          position="right"
-          date={new Date()}
-          sender="Tiago"
-        />
-        <Message
-          message="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
-          position="right"
-          date={new Date()}
-          sender="Tiago"
-        />
+        {messages?.map(message => (
+          <Message
+            key={message._id}
+            message={message.content}
+            position={message.sender === loggedInUser._id ? "right" : "left"}
+            date={new Date(message.createdAt)}
+            sender={message.sender}
+          />
+        ))}
       </div>
       <div className="input-bar d-flex align-items-center">
         <MdInsertEmoticon />
-        <GrAttachment />
+        <ImAttachment />
         <Form className="d-flex p-2 w-100">
           <FormControl type="text" placeholder="Type a message" aria-label="Type a message" className="rounded-pill" />
         </Form>

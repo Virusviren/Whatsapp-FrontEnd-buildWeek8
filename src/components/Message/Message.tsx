@@ -2,7 +2,7 @@ import moment from "moment"
 import "./Message.css"
 
 interface MessageProps {
-  message: string
+  message?: string
   date: Date
   position: string
   sender?: string
