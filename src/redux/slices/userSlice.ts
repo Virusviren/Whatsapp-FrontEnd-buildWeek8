@@ -10,11 +10,11 @@ const initialState: IUserStore = {
     name: "",
     surname: "",
     email: "",
-    groups: [],
     avatar: "",
     bio: "",
     status: "",
   },
+  profileCanvasOpen: false,
 }
 
 export const fetchUserData = createAsyncThunk("user/fetchUserData", async () => {
@@ -25,7 +25,11 @@ export const fetchUserData = createAsyncThunk("user/fetchUserData", async () => 
 export const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    toggleCanvas: state => {
+      state.profileCanvasOpen = !state.profileCanvasOpen
+    },
+  },
   extraReducers: builder => {
     builder.addCase(fetchUserData.fulfilled, (state, action) => {
       state.data = action.payload
@@ -34,5 +38,8 @@ export const userSlice = createSlice({
 })
 
 export const selectUserData = (state: RootState) => state.user.data
+export const selectCanvasStatus = (state: RootState) => state.user.profileCanvasOpen
+
+export const { toggleCanvas } = userSlice.actions
 
 export default userSlice.reducer
