@@ -1,3 +1,4 @@
+
 import Login from "../Login/Login"
 import Dashboard from "../Dashboard/Dashboard"
 import Registration from "../Registration/Registration"
@@ -17,3 +18,4 @@ const App = () => {
 }
 
 export default App
+
