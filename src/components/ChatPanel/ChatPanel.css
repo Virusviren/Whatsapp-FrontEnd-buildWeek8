@@ -1,4 +1,6 @@
 .ChatPanel {
+  display: flex;
+  flex-direction: column;
   flex-grow: 1;
   height: 100vh;
   border-right: 1px solid gray;
@@ -8,6 +10,8 @@
   padding: 10px;
   height: 60px;
   background-color: rgb(198, 198, 198);
+  position: sticky;
+  top: 0;
 }
 .ChatPanel h6 {
   margin: 0;
@@ -16,12 +20,17 @@
   margin: 0;
   font-size: 14px;
 }
-.ChatPanel img {
-  margin-right: 15px;
+.ChatPanel .messages {
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(206, 255, 206);
+  flex-grow: 1;
+  overflow: auto;
 }
-
 .ChatPanel .input-bar {
   background-color: rgb(198, 198, 198);
+  position: sticky;
+  bottom: 0;
 }
 
 .ChatPanel .input-bar svg {

@@ -1,7 +1,8 @@
 .Conversations {
   border-right: 1px solid gray;
-  width: 300px;
+  flex-basis: 300px;
   overflow: auto;
+  flex-shrink: 0;
 }
 .Conversations::-webkit-scrollbar {
   display: none;
