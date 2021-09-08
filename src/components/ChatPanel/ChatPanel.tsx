@@ -4,6 +4,7 @@ import { GrAttachment } from "react-icons/gr"
 import Avatar from "../Avatar/Avatar"
 
 import "./ChatPanel.css"
+import Message from "../Message/Message"
 
 interface ChatPanelProps {
   title: string
@@ -13,13 +14,51 @@ interface ChatPanelProps {
 
 const ChatPanel = ({ title, participants, avatar }: ChatPanelProps) => {
   return (
-    <div className="ChatPanel d-flex flex-column justify-content-between">
+    <div className="ChatPanel">
       <div className="d-flex align-items-center topbar">
         <Avatar url={avatar} />
-        <div>
+        <div className="ms-3">
           <h6>{title}</h6>
           <p className="text-muted">{participants.join(", ")}</p>
         </div>
+      </div>
+      <div className="messages">
+        <Message
+          message="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+          position="right"
+          date={new Date()}
+          sender="Tiago"
+        />
+        <Message
+          message="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+          position="left"
+          date={new Date()}
+          sender="Viljams"
+        />
+        <Message
+          message="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+          position="left"
+          date={new Date()}
+          sender="Nando"
+        />
+        <Message
+          message="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+          position="left"
+          date={new Date()}
+          sender="Viren"
+        />
+        <Message
+          message="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+          position="right"
+          date={new Date()}
+          sender="Tiago"
+        />
+        <Message
+          message="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+          position="right"
+          date={new Date()}
+          sender="Tiago"
+        />
       </div>
       <div className="input-bar d-flex align-items-center">
         <MdInsertEmoticon />

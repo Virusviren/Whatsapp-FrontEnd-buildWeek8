@@ -1,5 +1,3 @@
-import React from "react"
-
 import { Container } from "react-bootstrap"
 import ChatPanel from "../ChatPanel/ChatPanel"
 import Conversations from "../Conversations/Conversations"

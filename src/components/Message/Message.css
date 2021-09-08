@@ -1,0 +1,18 @@
+.Message {
+  width: 85%;
+  padding: 15px;
+  border-radius: 20px;
+  margin: 15px;
+}
+.Message.left {
+  align-self: flex-start;
+  background-color: rgb(70, 152, 74);
+}
+.Message.right {
+  background-color: rgb(86, 162, 203);
+  align-self: flex-end;
+}
+.Message .date {
+  font-size: 12px;
+  color: rgb(193, 193, 193);
+}
