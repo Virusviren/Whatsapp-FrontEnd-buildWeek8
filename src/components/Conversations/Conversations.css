@@ -1,0 +1,25 @@
+.Conversations {
+  border-right: 1px solid gray;
+  width: 300px;
+  overflow: auto;
+}
+.Conversations::-webkit-scrollbar {
+  display: none;
+}
+.Conversations .topbar {
+  padding: 10px;
+  background-color: rgb(198, 198, 198);
+  position: sticky;
+  top: 0;
+}
+.Conversations .topbar svg {
+  cursor: pointer;
+  color: rgb(0, 145, 164);
+}
+.Conversations .topbar svg:hover {
+  color: rgb(0, 109, 123);
+}
+
+.Conversations img {
+  margin-right: 15px;
+}

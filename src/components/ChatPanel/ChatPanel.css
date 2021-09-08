@@ -1,0 +1,31 @@
+.ChatPanel {
+  flex-grow: 1;
+  height: 100vh;
+  border-right: 1px solid gray;
+  overflow: auto;
+}
+.ChatPanel .topbar {
+  padding: 10px;
+  height: 60px;
+  background-color: rgb(198, 198, 198);
+}
+.ChatPanel h6 {
+  margin: 0;
+}
+.ChatPanel p {
+  margin: 0;
+  font-size: 14px;
+}
+.ChatPanel img {
+  margin-right: 15px;
+}
+
+.ChatPanel .input-bar {
+  background-color: rgb(198, 198, 198);
+}
+
+.ChatPanel .input-bar svg {
+  font-size: 32px;
+  margin: 0 5px;
+  color: gray;
+}

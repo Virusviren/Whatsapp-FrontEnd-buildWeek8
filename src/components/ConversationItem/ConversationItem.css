@@ -1,0 +1,18 @@
+.ConversationItem {
+  border-bottom: 1px solid rgb(194, 194, 194);
+  padding: 5px 15px;
+  cursor: pointer;
+}
+.ConversationItem:hover {
+  background-color: rgb(215, 215, 215);
+}
+.ConversationItem h6 {
+  margin: 0;
+}
+.ConversationItem p {
+  margin: 0;
+  font-size: 14px;
+}
+.ConversationItem img {
+  margin-right: 15px;
+}
