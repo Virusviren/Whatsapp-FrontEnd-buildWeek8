@@ -1,0 +1,11 @@
+.off-canvas-body {
+  width: 300px !important;
+}
+.profile-img {
+  width: 150px;
+  height: 150px;
+}
+
+.user-name {
+  color: aqua;
+}
