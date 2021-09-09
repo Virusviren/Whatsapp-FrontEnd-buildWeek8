@@ -9,7 +9,7 @@ export interface IConversation {
   background?: string
   users: [
     {
-      _id: string
+      _id: string | ISingleUser
       role: string
       banned: boolean
     }
@@ -18,11 +18,20 @@ export interface IConversation {
   groupType: string
 }
 
+export interface ISingleUser {
+  _id: string
+  name: string
+  surname: string
+  email: string
+  avatar: string
+}
+
 export interface IConversationStore {
   data: IConversation[]
   active: string
+  users: {
+    [key: string]: ISingleUser
+  }
+  addGroupCanvasOpen: boolean
+  inviteCanvasOpen: boolean
 }
-
-// export interface IActiveConversationStore {
-//   data: IConversation | null
-// }

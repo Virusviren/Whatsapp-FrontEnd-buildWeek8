@@ -4,13 +4,15 @@ import "./Avatar.css"
 
 interface AvatarProps {
   url: string
+  size?: string
+  profile?: boolean
 }
 
-const Avatar = ({ url }: AvatarProps) => {
+const Avatar = ({ url, size = "42px", profile = false }: AvatarProps) => {
   const dispatch = useAppDispatch()
   return (
-    <div className="Avatar" onClick={() => dispatch(toggleCanvas())}>
-      <img src={url} alt="avatar" />
+    <div className="Avatar" onClick={() => (profile ? dispatch(toggleCanvas()) : null)}>
+      <img src={url} alt="avatar" width={size} height={size} />
     </div>
   )
 }
