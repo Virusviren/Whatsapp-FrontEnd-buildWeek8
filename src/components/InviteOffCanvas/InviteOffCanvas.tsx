@@ -7,6 +7,9 @@ import "./InviteOffCanvas.css"
 import { useAppDispatch, useAppSelector } from "../../redux/app/hooks"
 import { Button } from "react-bootstrap"
 import {
+  invitePeople,
+  selectActiveConversation,
+  selectActiveConversationId,
   selectInviteCanvasState,
   toggleInviteCanvas,
 } from "../../redux/slices/conversationsSlice"
@@ -14,9 +17,12 @@ import backend from "../../backend/backend"
 import { IUser } from "../../typings/users"
 import Avatar from "../Avatar/Avatar"
 import { AiOutlineCheckCircle } from "react-icons/ai"
+import { ISingleUser } from "../../typings/conversations"
 
 const InviteOffCanvas = () => {
   const isCanvasOpen = useAppSelector(selectInviteCanvasState)
+  const activeGroupId = useAppSelector(selectActiveConversationId)
+  const activeGroup = useAppSelector(selectActiveConversation)
   const dispatch = useAppDispatch()
 
   const [allUsers, setAllUsers] = useState([])
@@ -25,10 +31,12 @@ const InviteOffCanvas = () => {
   useEffect(() => {
     const getAllUsers = async () => {
       const { data } = await backend.get("/users")
-      setAllUsers(data)
+      const inGroup = activeGroup?.users?.map((u) => (u as ISingleUser)._id)
+      const usersNotInGroup = data.filter((u: ISingleUser) => !inGroup?.includes(u._id))
+      setAllUsers(usersNotInGroup)
     }
     getAllUsers()
-  }, [])
+  }, [activeGroup])
 
   const toggleSelectedUser = (id: string) => {
     if (selectedUsers.includes(id)) {
@@ -68,7 +76,14 @@ const InviteOffCanvas = () => {
               </div>
             </div>
           ))}
-          <Button disabled={selectedUsers.length === 0}>INVITE</Button>
+          <Button
+            disabled={selectedUsers.length === 0}
+            onClick={() => {
+              dispatch(invitePeople({ users: selectedUsers, groupId: activeGroupId }))
+              dispatch(toggleInviteCanvas())
+            }}>
+            INVITE
+          </Button>
         </Offcanvas.Body>
       </Offcanvas>
     </>
