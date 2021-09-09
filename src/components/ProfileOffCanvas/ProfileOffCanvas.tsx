@@ -3,6 +3,7 @@ import React, {
   useRef,
   ChangeEvent,
   ChangeEventHandler,
+  useEffect,
 } from 'react';
 import Button from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
@@ -12,10 +13,12 @@ import { FaPen, FaCheck } from 'react-icons/fa';
 import { AiFillCamera } from 'react-icons/ai';
 import { useAppDispatch, useAppSelector } from '../../redux/app/hooks';
 import {
+  fetchUserData,
   selectCanvasStatus,
   selectUserData,
   toggleCanvas,
 } from '../../redux/slices/userSlice';
+import backend from '../../backend/backend';
 
 const ProfileOffCanvas = () => {
   const user = useAppSelector(selectUserData);
@@ -25,20 +28,27 @@ const ProfileOffCanvas = () => {
 
   // const handleClose = () => setShow(false)
   // const handleShow = () => setShow(true)
-  let userName = 'Viren';
-  let status = 'fsdkjbvsdjklabvdjkasbvdiosbvsdo';
+  let userName = user.name;
+  let status = user.status;
+
   const [name, setName] = useState(userName);
   const [about, setAbout] = useState(status);
+  //   const [file, setFile] = useState(file);
   const [inputFieldAbout, setInputFieldAbout] = useState(false);
   const [inputFieldName, setInputFieldName] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
-  const uploadImage = () => {
-    fileRef.current?.click();
+  const handleFileUpload = async (e: ChangeEvent<HTMLInputElement>) => {
+    const formData = new FormData();
+    formData.append('avatar', e.target.files![0]);
+    await backend.post('/users/me/uploadAvatar', formData);
+    dispatch(fetchUserData());
   };
-  const changeName = () => {
+  const changeName = async () => {
     console.log(name);
     setInputFieldName(false);
+    await backend.put('/users/me', { name: name });
+    dispatch(fetchUserData());
   };
   const handleChangeName = (event: ChangeEvent<HTMLInputElement>) => {
     console.log('hello handleChange');
@@ -48,16 +58,18 @@ const ProfileOffCanvas = () => {
     console.log('hello handleChange');
     setAbout(event.currentTarget.value);
   };
-  const changeAbout = () => {
+  const changeAbout = async () => {
     console.log(status);
     setInputFieldAbout(false);
+    await backend.put('/users/me', { status: about });
+    dispatch(fetchUserData());
   };
+  useEffect(() => {
+    setName(user.name);
+    setAbout(user.status);
+  }, [user]);
   return (
     <>
-      {/* <Button variant="primary" onClick={handleShow}>
-        Launch
-      </Button> */}
-
       <Offcanvas
         show={isCanvasOpen}
         onHide={() => dispatch(toggleCanvas())}
@@ -67,7 +79,7 @@ const ProfileOffCanvas = () => {
           <Offcanvas.Title>Profile</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          <div>
+          <div className='position-relative'>
             <div className='text-center common'>
               <Image
                 className='profile-img profile-img-hover'
@@ -81,12 +93,15 @@ const ProfileOffCanvas = () => {
                 style={{ display: 'none' }}
                 id='imageClick'
                 ref={fileRef}
+                onChange={handleFileUpload}
               />
-              <AiFillCamera
-                className='edit-img-top middle-over-lay edit-icons'
-                size='2em'
-                onClick={uploadImage}
-              />
+              <div className='middle-over-lay'>
+                <AiFillCamera
+                  className='edit-img-top  edit-icons'
+                  size='2em'
+                  onClick={() => fileRef.current?.click()}
+                />
+              </div>
             </div>
           </div>
 
