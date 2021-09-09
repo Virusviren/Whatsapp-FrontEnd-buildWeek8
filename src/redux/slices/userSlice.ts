@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { AxiosResponse } from "axios"
 import backend from "../../backend/backend"
+import { socket } from "../../components/Dashboard/Dashboard"
 import { IUser, IUserStore } from "../../typings/users"
 import { RootState } from "../app/store"
 
@@ -19,6 +20,7 @@ const initialState: IUserStore = {
 
 export const fetchUserData = createAsyncThunk("user/fetchUserData", async () => {
   const { data }: AxiosResponse<IUser> = await backend.get("/users/me")
+  socket.emit("setId", data._id)
   return data
 })
 

@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { AxiosResponse } from "axios"
 import backend from "../../backend/backend"
+import { socket } from "../../components/Dashboard/Dashboard"
 import { IConversation, IConversationStore } from "../../typings/conversations"
 import { IMessage } from "../../typings/messages"
 
@@ -13,6 +14,10 @@ const initialState: IConversationStore = {
 
 export const fetchUserConversations = createAsyncThunk("conversations/fetchUserConversations", async () => {
   const { data }: AxiosResponse<IConversation[]> = await backend.get("/users/me/chats")
+  socket.emit(
+    "joinGroups",
+    data.map(group => group._id)
+  )
   return data
 })
 
@@ -27,6 +32,10 @@ export const conversationsSlice = createSlice({
   reducers: {
     setActive: (state, action) => {
       state.active = action.payload
+    },
+    updateMessages: (state, action) => {
+      const roomIndex = state.data.findIndex(room => room._id === action.payload.roomId)
+      state.data[roomIndex].messageHistory.push(action.payload.message)
     },
   },
   extraReducers: builder => {
@@ -50,5 +59,7 @@ export const selectActiveConversation = (state: RootState) => {
   const active = state.conversations.data.find(conversation => conversation._id === state.conversations.active)
   return { title: active?.title, avatar: active?.avatar, users: active?.users.map(user => user._id) }
 }
-export const { setActive } = conversationsSlice.actions
+export const selectActiveConversationId = (state: RootState) => state.conversations.active
+
+export const { setActive, updateMessages } = conversationsSlice.actions
 export default conversationsSlice.reducer

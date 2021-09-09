@@ -1,5 +1,5 @@
 import { useAppDispatch } from "../../redux/app/hooks"
-import { setActive } from "../../redux/slices/conversationsSlice"
+import { fetchHistory, setActive } from "../../redux/slices/conversationsSlice"
 import Avatar from "../Avatar/Avatar"
 import "./ConversationItem.css"
 
@@ -13,7 +13,13 @@ interface ConversationItemProps {
 const ConversationItem = ({ avatar, title, subtitle, id }: ConversationItemProps) => {
   const dispatch = useAppDispatch()
   return (
-    <div className="ConversationItem d-flex align-items-center" onClick={() => dispatch(setActive(id))}>
+    <div
+      className="ConversationItem d-flex align-items-center"
+      onClick={() => {
+        dispatch(setActive(id))
+        dispatch(fetchHistory(id))
+      }}
+    >
       <Avatar url={avatar} />
       <div>
         <h6>{title}</h6>
