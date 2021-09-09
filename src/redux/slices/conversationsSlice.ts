@@ -58,9 +58,9 @@ export const invitePeople = createAsyncThunk(
   async ({ users, groupId }: { users: string[]; groupId: string }) => {
     const { data }: AxiosResponse<string[]> = await backend.post(
       `/groups/${groupId}/invite`,
-      { users }
+      { ids: users }
     )
-    return data
+    return { groupId, users: data }
   }
 )
 
@@ -104,6 +104,15 @@ export const conversationsSlice = createSlice({
       })
       .addCase(newGroup.fulfilled, (state, action) => {
         state.data.push(action.payload)
+      })
+      .addCase(invitePeople.fulfilled, (state, action) => {
+        const groupIndex = state.data.findIndex(
+          (group) => group._id === action.payload.groupId
+        )
+        const users = action.payload.users.map((id) => {
+          return { _id: { _id: id }, role: "GUEST", banned: false }
+        })
+        state.data[groupIndex].users.push(...(users as any))
       })
   },
 })
