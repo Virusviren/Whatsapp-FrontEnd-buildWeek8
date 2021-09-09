@@ -30,7 +30,11 @@ const Conversations = () => {
             id={conversation._id}
             title={conversation.title}
             avatar={conversation.avatar}
-            subtitle={conversation.messageHistory.length === 0 ? "No messages yet" : conversation.messageHistory[0].content!}
+            subtitle={
+              conversation.messageHistory.length === 0
+                ? "No messages yet"
+                : conversation.messageHistory[conversation.messageHistory.length - 1].content!
+            }
           />
         ))}
         {/* <ConversationItem title="Group name" avatar={process.env.REACT_APP_MOCK_GROUP_AVATAR!} subtitle="last message" />
