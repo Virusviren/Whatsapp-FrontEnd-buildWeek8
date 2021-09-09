@@ -28,11 +28,11 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    toggleCanvas: state => {
+    toggleCanvas: (state) => {
       state.profileCanvasOpen = !state.profileCanvasOpen
     },
   },
-  extraReducers: builder => {
+  extraReducers: (builder) => {
     builder.addCase(fetchUserData.fulfilled, (state, action) => {
       state.data = action.payload
     })

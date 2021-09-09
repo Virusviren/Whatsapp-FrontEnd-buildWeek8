@@ -1,0 +1,32 @@
+.off-canvas-body {
+  width: 300px !important;
+}
+.profile-img {
+  width: 150px;
+  height: 150px;
+}
+
+.user-name {
+  color: aqua;
+}
+
+.common:hover .profile-img-hover {
+  opacity: 0.3;
+}
+.common {
+  width: 150px;
+  margin: 0 auto;
+}
+.common .middle-over-lay {
+  opacity: 0;
+
+  position: absolute;
+  top: 15%;
+  left: 45%;
+  z-index: 999;
+  transition: 0.5s ease;
+  backface-visibility: hidden;
+}
+.common:hover .middle-over-lay {
+  opacity: 1;
+}

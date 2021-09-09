@@ -18,8 +18,7 @@ const ConversationItem = ({ avatar, title, subtitle, id }: ConversationItemProps
       onClick={() => {
         dispatch(setActive(id))
         dispatch(fetchHistory(id))
-      }}
-    >
+      }}>
       <Avatar url={avatar} />
       <div>
         <h6>{title}</h6>
