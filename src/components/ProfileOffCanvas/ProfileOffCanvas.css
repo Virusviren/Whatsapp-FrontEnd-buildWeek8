@@ -21,8 +21,8 @@
   opacity: 0;
 
   position: absolute;
-  top: 15%;
-  left: 45%;
+  top: 35%;
+  left: 42%;
   z-index: 999;
   transition: 0.5s ease;
   backface-visibility: hidden;
@@ -33,3 +33,7 @@
 /* .middle-over-lay {
   opacity: 1;
 } */
+
+.edit-icons {
+  cursor: pointer;
+}
