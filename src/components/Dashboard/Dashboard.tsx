@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { Container } from "react-bootstrap"
 import { io } from "socket.io-client"
-import { useAppDispatch, useAppSelector } from "../../redux/app/hooks"
+import { useAppDispatch } from "../../redux/app/hooks"
 import {
   addGroup,
   addInvitedPeopleToDict,
@@ -10,7 +10,7 @@ import {
   setUserTyping,
   updateMessages,
 } from "../../redux/slices/conversationsSlice"
-import { fetchUserData, selectUserData } from "../../redux/slices/userSlice"
+import { fetchUserData } from "../../redux/slices/userSlice"
 import ChatPanel from "../ChatPanel/ChatPanel"
 import Conversations from "../Conversations/Conversations"
 import "./Dashboard.css"

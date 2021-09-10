@@ -6,7 +6,6 @@ import { MdMessage } from "react-icons/md"
 import { useAppDispatch, useAppSelector } from "../../redux/app/hooks"
 import {
   selectActiveConversation,
-  selectActiveConversationId,
   selectConversationsData,
   selectUsers,
   toggleAddGroupCanvas,
@@ -46,31 +45,36 @@ const Conversations = () => {
               className="rounded-pill"
               size="sm"
               value={query}
-              onChange={e => setQuery(e.target.value)}
+              onChange={(e) => setQuery(e.target.value)}
             />
           </Form>
           <SearchUsers query={query} setQuery={setQuery} />
         </div>
       </div>
       <div>
-        {conversationsStore.map(conversation => (
+        {conversationsStore.map((conversation) => (
           <ConversationItem
             key={conversation._id}
             id={conversation._id}
             title={
               conversation.groupType === "PUBLIC"
                 ? conversation.title
-                : allUsers[(conversation.users.find(u => u._id !== user._id) as any)._id].name
+                : allUsers[
+                    (conversation.users.find((u) => u._id !== user._id) as any)._id
+                  ].name
             }
             avatar={
               conversation.groupType === "PUBLIC"
                 ? conversation.avatar
-                : allUsers[(conversation.users.find(u => u._id !== user._id) as any)._id].avatar
+                : allUsers[
+                    (conversation.users.find((u) => u._id !== user._id) as any)._id
+                  ].avatar
             }
             subtitle={
               conversation.messageHistory.length === 0
                 ? "No messages yet"
-                : conversation.messageHistory[conversation.messageHistory.length - 1].content!
+                : conversation.messageHistory[conversation.messageHistory.length - 1]
+                    .content!
             }
           />
         ))}

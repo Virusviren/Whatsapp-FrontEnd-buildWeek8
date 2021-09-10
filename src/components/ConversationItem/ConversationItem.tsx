@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "../../redux/app/hooks"
 import {
   fetchHistory,
-  selectActiveConversation,
   selectConversationsData,
   selectUsers,
   setActive,
@@ -28,7 +27,6 @@ const ConversationItem = ({
 }: ConversationItemProps) => {
   const allChats = useAppSelector(selectConversationsData)
   const dispatch = useAppDispatch()
-  const users = useAppSelector(selectUsers)
 
   const [thisGroup, setThisGroup] = useState<IConversation | undefined>(undefined)
 

@@ -208,6 +208,7 @@ export const selectActiveConversation = (state: RootState) => {
     avatar: active?.avatar,
     users: active?.users.map((user) => user._id),
     typing: active?.typing,
+    groupType: active?.groupType,
   }
 }
 export const selectUsers = (state: RootState) => state.conversations.users
