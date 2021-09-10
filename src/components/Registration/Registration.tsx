@@ -1,3 +1,4 @@
+
 import Container from "react-bootstrap/Container"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
@@ -28,10 +29,12 @@ const Registration = () => {
       console.log(error)
     }
   }
+
   return (
     <Container className="login-container">
       <Row>
         <Col>
+
           <Form className="form-container" onSubmit={handleLogin}>
             <InputGroup className="mb-3">
               <FormControl
@@ -40,10 +43,12 @@ const Registration = () => {
                 value={credentials.name}
                 onChange={(e) => setCredentials({ ...credentials, name: e.target.value })}
                 isValid={credentials.name.length > 0}
+
               />
             </InputGroup>
             <InputGroup className="mb-3">
               <FormControl
+
                 placeholder="Enter your Last Name"
                 name="lname"
                 value={credentials.surname}
@@ -51,10 +56,12 @@ const Registration = () => {
                   setCredentials({ ...credentials, surname: e.target.value })
                 }
                 isValid={credentials.surname.length > 0}
+
               />
             </InputGroup>
             <InputGroup className="mb-3">
               <FormControl
+
                 placeholder="Enter your Email"
                 name="email"
                 value={credentials.email}
@@ -62,6 +69,7 @@ const Registration = () => {
                   setCredentials({ ...credentials, email: e.target.value })
                 }
                 isValid={credentials.email.split("@").length === 2}
+
               />
             </InputGroup>
             <InputGroup className="mb-3">
@@ -74,6 +82,7 @@ const Registration = () => {
                 }
                 type="password"
                 isValid={secondPassword === credentials.password && secondPassword !== ""}
+
               />
             </InputGroup>
             <InputGroup className="mb-3">
