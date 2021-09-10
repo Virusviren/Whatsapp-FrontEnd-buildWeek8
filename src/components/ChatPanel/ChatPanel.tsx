@@ -23,6 +23,7 @@ const ChatPanel = () => {
   const [message, setMessage] = useState("")
   const { avatar, title, users, typing } = useAppSelector(selectActiveConversation)
   const conversationId = useAppSelector(selectActiveConversationId)
+  const activeConversation = useAppSelector(selectActiveConversation)
   const messages = useAppSelector(selectActiveHistory)
   const loggedInUser = useAppSelector(selectUserData)
   const allUsers = useAppSelector(selectUsers)
@@ -61,14 +62,12 @@ const ChatPanel = () => {
               .join(", ")}
           </p>
         </div>
-        <IoMdPersonAdd
-          size="2em"
-          className="me-4"
-          onClick={() => dispatch(toggleInviteCanvas())}
-        />
+        {activeConversation?.groupType === "PUBLIC" && (
+          <IoMdPersonAdd size="2em" className="me-4" onClick={() => dispatch(toggleInviteCanvas())} />
+        )}
       </div>
       <div className="messages">
-        {messages?.map((message) => (
+        {messages?.map(message => (
           <Message
             key={message._id}
             message={message.content}
@@ -100,6 +99,7 @@ const ChatPanel = () => {
               socket.emit("typing", conversationId)
             }}
             className="rounded-pill"
+            disabled={!conversationId}
           />
         </Form>
       </div>

@@ -5,6 +5,8 @@ import { Form, FormControl } from "react-bootstrap"
 import { MdMessage } from "react-icons/md"
 import { useAppDispatch, useAppSelector } from "../../redux/app/hooks"
 import {
+  selectActiveConversation,
+  selectActiveConversationId,
   selectConversationsData,
   selectUsers,
   toggleAddGroupCanvas,
@@ -21,6 +23,7 @@ const Conversations = () => {
   const conversationsStore = useAppSelector(selectConversationsData)
   const user = useAppSelector(selectUserData)
   const allUsers = useAppSelector(selectUsers)
+  const activeConversation = useAppSelector(selectActiveConversation)
   const dispatch = useAppDispatch()
 
   const [query, setQuery] = useState("")
@@ -32,7 +35,7 @@ const Conversations = () => {
           <Avatar url={user.avatar!} profile={true} />
           <ProfileOffCanvas />
           <AddGroupOffCanvas />
-          <InviteOffCanvas />
+          {activeConversation?.groupType === "PUBLIC" && <InviteOffCanvas />}
           <MdMessage size={28} onClick={() => dispatch(toggleAddGroupCanvas())} />
         </div>
         <div className="position-relative w-100">
@@ -43,36 +46,31 @@ const Conversations = () => {
               className="rounded-pill"
               size="sm"
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={e => setQuery(e.target.value)}
             />
           </Form>
           <SearchUsers query={query} setQuery={setQuery} />
         </div>
       </div>
       <div>
-        {conversationsStore.map((conversation) => (
+        {conversationsStore.map(conversation => (
           <ConversationItem
             key={conversation._id}
             id={conversation._id}
             title={
               conversation.groupType === "PUBLIC"
                 ? conversation.title
-                : allUsers[
-                    (conversation.users.find((u) => u._id !== user._id) as any)._id
-                  ].name
+                : allUsers[(conversation.users.find(u => u._id !== user._id) as any)._id].name
             }
             avatar={
               conversation.groupType === "PUBLIC"
                 ? conversation.avatar
-                : allUsers[
-                    (conversation.users.find((u) => u._id !== user._id) as any)._id
-                  ].avatar
+                : allUsers[(conversation.users.find(u => u._id !== user._id) as any)._id].avatar
             }
             subtitle={
               conversation.messageHistory.length === 0
                 ? "No messages yet"
-                : conversation.messageHistory[conversation.messageHistory.length - 1]
-                    .content!
+                : conversation.messageHistory[conversation.messageHistory.length - 1].content!
             }
           />
         ))}
