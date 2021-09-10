@@ -50,6 +50,16 @@ export const newGroup = createAsyncThunk(
   }
 )
 
+export const newPrivateGroup = createAsyncThunk(
+  "conversations/newPrivateGroup",
+  async (payload: any) => {
+    const { data }: AxiosResponse<IConversation> = await backend.post("/groups/new", {
+      user: payload.user,
+    })
+    return { data, me: payload.me }
+  }
+)
+
 export const invitePeople = createAsyncThunk(
   "conversations/invitePeople",
   async ({
@@ -106,6 +116,24 @@ export const conversationsSlice = createSlice({
         state.users[id] = action.payload[id]
       }
     },
+    setUserTyping: (state, action) => {
+      const groupIndex = state.data.findIndex(
+        (group) => group._id === action.payload.groupId
+      )
+      if (!state.data[groupIndex]?.typing) {
+        state.data[groupIndex].typing = {}
+      }
+
+      state.data[groupIndex].typing![action.payload.userId] = action.payload.date
+    },
+    removeUserTyping: (state, action) => {
+      const groupIndex = state.data.findIndex(
+        (group) => group._id === action.payload.groupId
+      )
+      if (state.data[groupIndex].typing![action.payload.userId] === action.payload.date) {
+        delete state.data[groupIndex].typing![action.payload.userId]
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -147,6 +175,20 @@ export const conversationsSlice = createSlice({
         })
         state.data[groupIndex].users.push(...(users as any))
       })
+      .addCase(newPrivateGroup.fulfilled, (state, action) => {
+        socket.emit("createdGroup", action.payload.data._id)
+        const addedUsers: { [key: string]: IUser } = {}
+        action.payload.data.users.forEach(
+          (u) => (addedUsers[u._id as string] = state.users[u._id as string])
+        )
+        addedUsers[action.payload.me._id] = action.payload.me
+        socket.emit("inviteToPrivate", {
+          users: addedUsers,
+          group: action.payload.data,
+          myId: action.payload.me._id,
+        })
+        state.data.push(action.payload.data)
+      })
   },
 })
 
@@ -165,6 +207,7 @@ export const selectActiveConversation = (state: RootState) => {
     title: active?.title,
     avatar: active?.avatar,
     users: active?.users.map((user) => user._id),
+    typing: active?.typing,
   }
 }
 export const selectUsers = (state: RootState) => state.conversations.users
@@ -181,6 +224,8 @@ export const {
   toggleInviteCanvas,
   addGroup,
   addInvitedPeopleToDict,
+  setUserTyping,
+  removeUserTyping,
 } = conversationsSlice.actions
 
 export default conversationsSlice.reducer
