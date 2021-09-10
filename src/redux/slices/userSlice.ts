@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { AxiosResponse } from "axios"
 import backend from "../../backend/backend"
+import { socket } from "../../components/Dashboard/Dashboard"
 import { IUser, IUserStore } from "../../typings/users"
 import { RootState } from "../app/store"
 
@@ -11,7 +12,6 @@ const initialState: IUserStore = {
     surname: "",
     email: "",
     avatar: "",
-    bio: "",
     status: "",
   },
   profileCanvasOpen: false,
@@ -19,6 +19,7 @@ const initialState: IUserStore = {
 
 export const fetchUserData = createAsyncThunk("user/fetchUserData", async () => {
   const { data }: AxiosResponse<IUser> = await backend.get("/users/me")
+  socket.emit("setId", data._id)
   return data
 })
 
@@ -26,11 +27,11 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    toggleCanvas: state => {
+    toggleCanvas: (state) => {
       state.profileCanvasOpen = !state.profileCanvasOpen
     },
   },
-  extraReducers: builder => {
+  extraReducers: (builder) => {
     builder.addCase(fetchUserData.fulfilled, (state, action) => {
       state.data = action.payload
     })

@@ -1,4 +1,3 @@
-
 import Login from "../Login/Login"
 import Dashboard from "../Dashboard/Dashboard"
 import Registration from "../Registration/Registration"
@@ -10,7 +9,7 @@ const App = () => {
     <div className="App">
       <Router>
         <Route exact path="/" component={Dashboard} />
-        <Route exact path="/registration" component={Registration} />
+        <Route exact path="/register" component={Registration} />
         <Route exact path="/login" component={Login} />
       </Router>
     </div>
@@ -18,4 +17,3 @@ const App = () => {
 }
 
 export default App
-

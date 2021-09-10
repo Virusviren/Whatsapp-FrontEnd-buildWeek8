@@ -1,4 +1,5 @@
 import { IMessage } from "./messages"
+import { IUser } from "./users"
 
 export interface IConversation {
   _id: string
@@ -9,7 +10,7 @@ export interface IConversation {
   background?: string
   users: [
     {
-      _id: string
+      _id: string | IUser
       role: string
       banned: boolean
     }
@@ -21,8 +22,9 @@ export interface IConversation {
 export interface IConversationStore {
   data: IConversation[]
   active: string
+  users: {
+    [key: string]: IUser
+  }
+  addGroupCanvasOpen: boolean
+  inviteCanvasOpen: boolean
 }
-
-// export interface IActiveConversationStore {
-//   data: IConversation | null
-// }
