@@ -17,7 +17,6 @@ import { selectUserData } from "../../redux/slices/userSlice"
 import { FormEvent, useState } from "react"
 import backend from "../../backend/backend"
 import { socket } from "../Dashboard/Dashboard"
-import { ISingleUser } from "../../typings/conversations"
 import { IoMdPersonAdd } from "react-icons/io"
 
 const ChatPanel = () => {
@@ -50,7 +49,7 @@ const ChatPanel = () => {
         <div className="ms-3 me-auto">
           {title ? <h6>{title}</h6> : <h6>Select a conversation</h6>}
           <p className="text-muted">
-            {users?.map((u) => allUsers[(u as ISingleUser)._id].name).join(", ")}
+            {users?.map((u) => allUsers[u as string]?.name).join(", ")}
           </p>
         </div>
         <IoMdPersonAdd

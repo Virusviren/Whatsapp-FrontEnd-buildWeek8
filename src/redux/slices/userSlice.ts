@@ -12,7 +12,6 @@ const initialState: IUserStore = {
     surname: "",
     email: "",
     avatar: "",
-    bio: "",
     status: "",
   },
   profileCanvasOpen: false,

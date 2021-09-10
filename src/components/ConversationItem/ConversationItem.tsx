@@ -8,16 +8,25 @@ interface ConversationItemProps {
   title: string
   subtitle: string
   id: string
+  disableDefault?: boolean
 }
 
-const ConversationItem = ({ avatar, title, subtitle, id }: ConversationItemProps) => {
+const ConversationItem = ({
+  avatar,
+  title,
+  subtitle,
+  id,
+  disableDefault = false,
+}: ConversationItemProps) => {
   const dispatch = useAppDispatch()
   return (
     <div
       className="ConversationItem d-flex align-items-center"
       onClick={() => {
-        dispatch(setActive(id))
-        dispatch(fetchHistory(id))
+        if (!disableDefault) {
+          dispatch(setActive(id))
+          dispatch(fetchHistory(id))
+        }
       }}>
       <Avatar url={avatar} />
       <div>
