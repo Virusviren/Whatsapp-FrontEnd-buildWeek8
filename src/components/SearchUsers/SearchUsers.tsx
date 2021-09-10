@@ -2,7 +2,9 @@ import { useState, useEffect } from "react"
 import { ListGroup } from "react-bootstrap"
 import backend from "../../backend/backend"
 import { useAppDispatch, useAppSelector } from "../../redux/app/hooks"
-import { addInvitedPeopleToDict, invitePeople, newGroup, selectActiveConversationId } from "../../redux/slices/conversationsSlice"
+
+import { addInvitedPeopleToDict, invitePeople, newGroup, selectActiveConversationId, newPrivateGroup } from "../../redux/slices/conversationsSlice"
+
 import { selectUserData } from "../../redux/slices/userSlice"
 import { IUser } from "../../typings/users"
 import ConversationItem from "../ConversationItem/ConversationItem"
@@ -13,6 +15,7 @@ const SearchUsers = ({ query, setQuery }: { query: string; setQuery: (query: str
   const me = useAppSelector(selectUserData)
   const activeGroupId = useAppSelector(selectActiveConversationId)
   const dispatch = useAppDispatch()
+  const me = useAppSelector(selectUserData)
 
   useEffect(() => {
     const fetchAllUsers = async () => {
@@ -32,16 +35,16 @@ const SearchUsers = ({ query, setQuery }: { query: string; setQuery: (query: str
               key={u._id}
               onClick={async () => {
                 setQuery("")
-                await dispatch(newGroup({ user: u._id }))
-                const usersObject = {
-                  [u._id]: u,
-                  [me._id]: me,
-                }
-                dispatch(addInvitedPeopleToDict(usersObject))
-                dispatch(invitePeople({ users: usersObject, groupId: activeGroupId, myId: me._id }))
-              }}
-            >
-              <ConversationItem title={u.name} subtitle={u.status} avatar={u.avatar} id={u._id} disableDefault />
+                dispatch(addInvitedPeopleToDict({ [u._id]: u }))
+                dispatch(newPrivateGroup({ user: u._id, me: me }))
+              }}>
+              <ConversationItem
+                title={u.name}
+                subtitle={u.status}
+                avatar={u.avatar}
+                id={u._id}
+                disableDefault
+              />
             </ListGroup.Item>
           ))}
       </ListGroup>
