@@ -1,6 +1,4 @@
 .Avatar img {
-  height: 42px;
-  width: 42px;
   object-fit: cover;
   border-radius: 50%;
   cursor: pointer;
