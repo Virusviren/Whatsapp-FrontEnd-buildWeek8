@@ -7,6 +7,7 @@ import "./InviteOffCanvas.css"
 import { useAppDispatch, useAppSelector } from "../../redux/app/hooks"
 import { Button } from "react-bootstrap"
 import {
+  addInvitedPeopleToDict,
   invitePeople,
   selectActiveConversation,
   selectActiveConversationId,
@@ -17,22 +18,23 @@ import backend from "../../backend/backend"
 import { IUser } from "../../typings/users"
 import Avatar from "../Avatar/Avatar"
 import { AiOutlineCheckCircle } from "react-icons/ai"
-import { ISingleUser } from "../../typings/conversations"
+import { selectUserData } from "../../redux/slices/userSlice"
 
 const InviteOffCanvas = () => {
   const isCanvasOpen = useAppSelector(selectInviteCanvasState)
   const activeGroupId = useAppSelector(selectActiveConversationId)
   const activeGroup = useAppSelector(selectActiveConversation)
+  const me = useAppSelector(selectUserData)
   const dispatch = useAppDispatch()
 
-  const [allUsers, setAllUsers] = useState([])
+  const [allUsers, setAllUsers] = useState<IUser[]>([])
   const [selectedUsers, setSelectedUsers] = useState<string[]>([])
 
   useEffect(() => {
     const getAllUsers = async () => {
       const { data } = await backend.get("/users")
-      const inGroup = activeGroup?.users?.map((u) => (u as ISingleUser)._id)
-      const usersNotInGroup = data.filter((u: ISingleUser) => !inGroup?.includes(u._id))
+      const inGroup = activeGroup?.users?.map((u) => u)
+      const usersNotInGroup = data.filter((u: IUser) => !inGroup?.includes(u._id))
       setAllUsers(usersNotInGroup)
     }
     getAllUsers()
@@ -79,7 +81,16 @@ const InviteOffCanvas = () => {
           <Button
             disabled={selectedUsers.length === 0}
             onClick={() => {
-              dispatch(invitePeople({ users: selectedUsers, groupId: activeGroupId }))
+              const usersObject: { [key: string]: IUser } = {}
+              selectedUsers.forEach(
+                (uId) =>
+                  (usersObject[uId] = allUsers.find((user) => user._id === uId) as IUser)
+              )
+              dispatch(addInvitedPeopleToDict(usersObject))
+              usersObject[me._id] = me
+              dispatch(
+                invitePeople({ users: usersObject, groupId: activeGroupId, myId: me._id })
+              )
               dispatch(toggleInviteCanvas())
             }}>
             INVITE

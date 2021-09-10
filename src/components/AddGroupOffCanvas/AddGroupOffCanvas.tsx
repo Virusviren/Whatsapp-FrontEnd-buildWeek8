@@ -9,13 +9,16 @@ import { FaRegArrowAltCircleRight } from "react-icons/fa"
 import { useAppDispatch, useAppSelector } from "../../redux/app/hooks"
 import { Form } from "react-bootstrap"
 import {
+  addInvitedPeopleToDict,
   newGroup,
   selectAddGroupCanvasState,
   toggleAddGroupCanvas,
 } from "../../redux/slices/conversationsSlice"
+import { selectUserData } from "../../redux/slices/userSlice"
 
 const AddGroupOffCanvas = () => {
   const isCanvasOpen = useAppSelector(selectAddGroupCanvasState)
+  const me = useAppSelector(selectUserData)
   const dispatch = useAppDispatch()
 
   const fileRef = useRef<HTMLInputElement>(null)
@@ -92,6 +95,7 @@ const AddGroupOffCanvas = () => {
                   color="green"
                   onClick={() => {
                     dispatch(newGroup({ title: groupName, description: groupBio }))
+                    dispatch(addInvitedPeopleToDict({ [me._id]: me }))
                     setGroupBio("")
                     setGroupName("")
                     dispatch(toggleAddGroupCanvas())

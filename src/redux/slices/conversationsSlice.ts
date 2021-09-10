@@ -2,12 +2,9 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { AxiosResponse } from "axios"
 import backend from "../../backend/backend"
 import { socket } from "../../components/Dashboard/Dashboard"
-import {
-  IConversation,
-  IConversationStore,
-  ISingleUser,
-} from "../../typings/conversations"
+import { IConversation, IConversationStore } from "../../typings/conversations"
 import { IMessage } from "../../typings/messages"
+import { IUser } from "../../typings/users"
 
 import { RootState } from "../app/store"
 
@@ -44,23 +41,43 @@ export const fetchHistory = createAsyncThunk(
 
 export const newGroup = createAsyncThunk(
   "conversations/newGroup",
-  async ({ title, description }: { title: string; description: string }) => {
-    const { data }: AxiosResponse<IConversation> = await backend.post("/groups/new", {
-      title,
-      description,
-    })
+  async (payload: any) => {
+    const { data }: AxiosResponse<IConversation> = await backend.post(
+      "/groups/new",
+      payload
+    )
     return data
   }
 )
 
 export const invitePeople = createAsyncThunk(
   "conversations/invitePeople",
-  async ({ users, groupId }: { users: string[]; groupId: string }) => {
-    const { data }: AxiosResponse<string[]> = await backend.post(
-      `/groups/${groupId}/invite`,
-      { ids: users }
-    )
-    return { groupId, users: data }
+  async ({
+    users,
+    groupId,
+    myId,
+  }: {
+    users: { [key: string]: IUser }
+    groupId: string
+    myId: string
+  }) => {
+    const { data }: AxiosResponse<{ addedUsers: string[]; updatedGroup: IConversation }> =
+      await backend.post(`/groups/${groupId}/invite`, {
+        ids: Object.keys(users),
+      })
+
+    const addedUsersDict = users
+    for (const user of data.addedUsers) {
+      if (!(user in users)) {
+        delete addedUsersDict[user]
+      }
+    }
+    socket.emit("invitedPeople", {
+      users: addedUsersDict,
+      group: data.updatedGroup,
+      myId,
+    })
+    return { groupId, users: data.addedUsers }
   }
 )
 
@@ -81,6 +98,14 @@ export const conversationsSlice = createSlice({
     toggleInviteCanvas: (state) => {
       state.inviteCanvasOpen = !state.inviteCanvasOpen
     },
+    addGroup: (state, action) => {
+      state.data.push(action.payload)
+    },
+    addInvitedPeopleToDict: (state, action) => {
+      for (const id in action.payload) {
+        state.users[id] = action.payload[id]
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -91,10 +116,17 @@ export const conversationsSlice = createSlice({
 
         const usersDict: any = {}
 
-        users.forEach((u) => (usersDict[(u as ISingleUser)._id] = u))
+        users.forEach((u) => (usersDict[(u as IUser)._id] = u))
+
+        const newConversations = action.payload.map((c) => {
+          const newUsers = c.users.map((u) => {
+            return { ...u, _id: (u._id as IUser)._id }
+          })
+          return { ...c, users: newUsers }
+        })
 
         state.users = usersDict
-        state.data = action.payload
+        state.data = newConversations as any
       })
       .addCase(fetchHistory.fulfilled, (state, action) => {
         const index = state.data.findIndex(
@@ -103,14 +135,15 @@ export const conversationsSlice = createSlice({
         state.data[index].messageHistory = action.payload.data
       })
       .addCase(newGroup.fulfilled, (state, action) => {
+        socket.emit("createdGroup", action.payload._id)
         state.data.push(action.payload)
       })
       .addCase(invitePeople.fulfilled, (state, action) => {
         const groupIndex = state.data.findIndex(
           (group) => group._id === action.payload.groupId
         )
-        const users = action.payload.users.map((id) => {
-          return { _id: { _id: id }, role: "GUEST", banned: false }
+        const users = action.payload.users.map((id: any) => {
+          return { _id: id, role: "GUEST", banned: false }
         })
         state.data[groupIndex].users.push(...(users as any))
       })
@@ -141,7 +174,13 @@ export const selectAddGroupCanvasState = (state: RootState) =>
 export const selectInviteCanvasState = (state: RootState) =>
   state.conversations.inviteCanvasOpen
 
-export const { setActive, updateMessages, toggleAddGroupCanvas, toggleInviteCanvas } =
-  conversationsSlice.actions
+export const {
+  setActive,
+  updateMessages,
+  toggleAddGroupCanvas,
+  toggleInviteCanvas,
+  addGroup,
+  addInvitedPeopleToDict,
+} = conversationsSlice.actions
 
 export default conversationsSlice.reducer

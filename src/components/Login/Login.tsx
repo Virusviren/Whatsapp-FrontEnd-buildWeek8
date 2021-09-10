@@ -31,13 +31,15 @@ const Login = () => {
     <Container className="login-container">
       <Row>
         <Col>
-          <Form className="form-container" onSubmit={e => handleLogin(e)}>
+          <Form className="form-container" onSubmit={(e) => handleLogin(e)}>
             <InputGroup className="mb-3">
               <FormControl
                 placeholder="Enter your Email"
                 name="email"
                 value={credentials.email}
-                onChange={e => setCredentials({ ...credentials, email: e.target.value })}
+                onChange={(e) =>
+                  setCredentials({ ...credentials, email: e.target.value })
+                }
               />
             </InputGroup>
             <InputGroup className="mb-3">
@@ -46,7 +48,9 @@ const Login = () => {
                 name="password"
                 type="password"
                 value={credentials.password}
-                onChange={e => setCredentials({ ...credentials, password: e.target.value })}
+                onChange={(e) =>
+                  setCredentials({ ...credentials, password: e.target.value })
+                }
               />
             </InputGroup>
 
@@ -55,7 +59,12 @@ const Login = () => {
                 Login
               </button>
 
-              <input type="button" className="btn btn-success" value="SignUp" onClick={handleClick} />
+              <input
+                type="button"
+                className="btn btn-success"
+                value="SignUp"
+                onClick={handleClick}
+              />
             </div>
           </Form>
         </Col>

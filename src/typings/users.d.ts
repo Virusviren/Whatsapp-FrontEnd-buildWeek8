@@ -2,9 +2,8 @@ export interface IUser {
   name: string
   surname: string
   email: string
-  avatar?: string
-  bio?: string
-  status?: string
+  avatar: string
+  status: string
   _id: string
 }
 
