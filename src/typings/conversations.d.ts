@@ -17,6 +17,7 @@ export interface IConversation {
   ]
   closed?: boolean
   groupType: string
+  typing?: { [key: string]: number }
 }
 
 export interface IConversationStore {

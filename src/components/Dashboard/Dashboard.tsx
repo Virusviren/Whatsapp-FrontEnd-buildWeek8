@@ -6,6 +6,8 @@ import {
   addGroup,
   addInvitedPeopleToDict,
   fetchUserConversations,
+  removeUserTyping,
+  setUserTyping,
   updateMessages,
 } from "../../redux/slices/conversationsSlice"
 import { fetchUserData, selectUserData } from "../../redux/slices/userSlice"
@@ -28,9 +30,15 @@ const Dashboard = () => {
       dispatch(updateMessages({ roomId: room, message }))
     })
     socket.on("invited", ({ group, users }) => {
-      dispatch(addGroup(group))
-      console.log(users)
       dispatch(addInvitedPeopleToDict(users))
+      dispatch(addGroup(group))
+    })
+    socket.on("typing", (data) => {
+      const date = new Date().valueOf()
+      dispatch(setUserTyping({ ...data, date }))
+      setTimeout(() => {
+        dispatch(removeUserTyping({ ...data, date }))
+      }, 5000)
     })
   }, [])
 
